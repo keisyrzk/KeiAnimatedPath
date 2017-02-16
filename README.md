@@ -39,3 +39,7 @@ KeiAnimatedPath().drawAnimatedCustomPath(in: targetView, path: myPath, duration:
 ```
 KeiAnimatedPath.shared.drawAnimatedRectanglePath(in: targetView, duration: 10, lineWidth: 20, lineColor: UIColor.red)
 ```
+
+#PREVIEW
+![](http://www.reactiongifs.us/wp-content/uploads/2013/10/nuh_uh_conan_obrien.gif)
+
