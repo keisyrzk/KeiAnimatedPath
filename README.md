@@ -30,6 +30,10 @@ KeiAnimatedPath().drawAnimatedPolygonPath(in: targetView, numberOfSides: 8, rota
 KeiAnimatedPath().drawAnimatedText(in: targetView, with: "Keisyrzk", duration: 10, lineWidth: 2, textColor: UIColor.blue, fontName: "anyFontName", fontSize: 50)
 ```
 
+###Custom path
+```
+KeiAnimatedPath().drawAnimatedCustomPath(in: targetView, path: myPath, duration: 15, lineWidth: 5, lineColor: UIColor.blue)
+```
 
 ###If you prefer not creating seperated instances you can also use a singleton like so:
 ```
