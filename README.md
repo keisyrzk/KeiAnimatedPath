@@ -41,5 +41,5 @@ KeiAnimatedPath.shared.drawAnimatedRectanglePath(in: targetView, duration: 10, l
 ```
 
 #PREVIEW
-![](http://www.reactiongifs.us/wp-content/uploads/2013/10/nuh_uh_conan_obrien.gif)
+![](https://github.com/keisyrzk/KeiAnimatedPath/blob/master/preview.gif)
 
