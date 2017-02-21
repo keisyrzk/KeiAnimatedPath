@@ -42,11 +42,12 @@ class KeiAnimatedPath
     private var inputRotationAngle: CGFloat = 0
     private var inputPolygonSidesNumber: Int = 6
     private var inputCornerRadius: Float = 8
-
+    
     private var inputText = ""
     private var inputFontSize: CGFloat = 20
     private var inputFontName = "PingFangSC-Bold"
     
+
     
     func drawAnimatedCustomPath(in view: UIView, path: CGPath, duration: CFTimeInterval, lineWidth: CGFloat, lineColor: UIColor)
     {
@@ -102,7 +103,7 @@ class KeiAnimatedPath
         }
         
         self.inputPath = polygonPath(view: view)
-
+        
         
         animationLayer = CALayer()
         animationLayer?.frame = CGRect(x: 0, y: 0, width: view.layer.bounds.width, height: view.layer.bounds.height)
@@ -130,21 +131,11 @@ class KeiAnimatedPath
         animationLayer = CALayer()
         animationLayer?.frame = CGRect(x: 0, y: 0, width: view.layer.bounds.width, height: view.layer.bounds.height)
         view.layer.addSublayer(animationLayer!)
-
+        
         setupTextLayer(in: view)
         startAnimation()
     }
     
-    
-    func clearLayer()
-    {
-        if let _ = pathLayer
-        {
-            pathLayer?.removeFromSuperlayer()
-            pathLayer = nil
-        }
-    }
-
     
     func setupDrawingLayer()
     {
@@ -166,7 +157,7 @@ class KeiAnimatedPath
             pathShapeLayer.lineJoin = kCALineJoinBevel
             
             animationLayer!.addSublayer(pathShapeLayer)
-        
+            
             pathLayer = pathShapeLayer
         }
     }
@@ -227,7 +218,7 @@ class KeiAnimatedPath
         
     }
     
-    func startAnimation()
+    private func startAnimation()
     {
         pathLayer?.removeAllAnimations()
         
@@ -238,30 +229,62 @@ class KeiAnimatedPath
         pathLayer?.add(pathAnimation, forKey: "strokeEnd")
     }
     
+        //freezes the animation until clearLayer() is called
+    func stopAnimatingWithPause()
+    {
+        if let pausedTime = pathLayer?.convertTime(CACurrentMediaTime(), from: nil)
+        {
+            pathLayer?.speed = 0.0
+            pathLayer?.timeOffset = pausedTime
+        }
+    }
     
+        //clears the animation layers
+    func stopAnimatingWithClear()
+    {
+        clearLayer()
+    }
+    
+    func clearLayer()
+    {
+        if let _ = pathLayer
+        {
+            pathLayer?.removeFromSuperlayer()
+            pathLayer = nil
+        }
+    }
     
     
     /// CREATE PATH ///
     
-    func rectanglePath(view: UIView) -> CGPath
+    private func rectanglePath(view: UIView) -> CGPath
     {
-        let pathRect = view.frame
-        let bottomLeft = CGPoint(x: pathRect.minX - view.frame.origin.x, y: pathRect.minY - view.frame.origin.y)
-        let topLeft = CGPoint(x: pathRect.minX - view.frame.origin.x, y: pathRect.maxY - view.frame.origin.y)
-        let bottomRight = CGPoint(x: pathRect.maxX - view.frame.origin.x, y: pathRect.minY - view.frame.origin.y)
-        let topRight = CGPoint(x: pathRect.maxX - view.frame.origin.x, y: pathRect.maxY - view.frame.origin.y)
-        
+            //start point - left-down corner
+        var point = CGPoint(x: inputLineWidth/2, y: 0)
         let path = UIBezierPath()
-        path.move(to: bottomLeft)
-        path.addLine(to: topLeft)
-        path.addLine(to: topRight)
-        path.addLine(to: bottomRight)
-        path.addLine(to: bottomLeft)
+        path.move(to: point)
+            //left-up corner
+        point = CGPoint(x: inputLineWidth/2, y: view.frame.height)
+        path.addLine(to: point)
+        path.move(to: CGPoint(x: inputLineWidth/2, y: view.frame.height - inputLineWidth/2))
+            //right-up corner
+        point = CGPoint(x: view.frame.width, y: view.frame.height - inputLineWidth/2)
+        path.addLine(to: point)
+        path.move(to: CGPoint(x: view.frame.width - inputLineWidth/2, y: view.frame.height - inputLineWidth/2))
+            //right-down corner
+        point = CGPoint(x: view.frame.width - inputLineWidth/2, y: 0)
+        path.addLine(to: point)
+        path.move(to: CGPoint(x: view.frame.width - inputLineWidth/2, y: inputLineWidth/2))
+            //start point - left-down corner
+        point = CGPoint(x: 0, y: inputLineWidth/2)
+        path.addLine(to: point)
+        
+        path.close()
         
         return path.cgPath
     }
-
-    func polygonPath(view: UIView) -> CGPath
+    
+    private func polygonPath(view: UIView) -> CGPath
     {
         let path = UIBezierPath()
         
